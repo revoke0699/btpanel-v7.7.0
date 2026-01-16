@@ -71,26 +71,7 @@ if [ -f "$ACME_FILE" ]; then
   sed -i 's/X509Req.set_version(2)/X509Req.set_version(0)/g' $ACME_FILE
 fi
 
-# ====== SSH 登录 / 宝塔终端修复 ======
-echo "🔑 修复 SSH 登录与宝塔终端异常..."
 
-# 1. 修复 sshd_config
-SSHD_CONFIG="/etc/ssh/sshd_config"
-
-sed -i 's/^#\?UseDNS.*/UseDNS no/g' $SSHD_CONFIG
-sed -i 's/^#\?GSSAPIAuthentication.*/GSSAPIAuthentication no/g' $SSHD_CONFIG
-sed -i 's/^#\?PermitRootLogin.*/PermitRootLogin yes/g' $SSHD_CONFIG
-sed -i 's/^#\?PasswordAuthentication.*/PasswordAuthentication yes/g' $SSHD_CONFIG
-sed -i 's/^#\?ClientAliveInterval.*/ClientAliveInterval 60/g' $SSHD_CONFIG
-sed -i 's/^#\?ClientAliveCountMax.*/ClientAliveCountMax 3/g' $SSHD_CONFIG
-
-# 2. 确保 sftp 子系统正常
-if ! grep -q "^Subsystem sftp" $SSHD_CONFIG; then
-  echo "Subsystem sftp /usr/lib/openssh/sftp-server" >> $SSHD_CONFIG
-fi
-
-# 3. 重启 SSH
-systemctl restart sshd || systemctl restart ssh
 
 # ====== 重启宝塔 ======
 echo "🔄 重启宝塔面板..."
