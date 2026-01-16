@@ -25,3 +25,11 @@ LC_ALL="en_US.UTF-8"
 ```
 
 修改后保存文件，重启VPS即可。
+
+**修复环境问题
+```Bash
+btpip install -U Flask==2.1.2
+btpip install pyOpenSSL==22.1.0
+btpip install cffi==1.14
+bt 1
+```
