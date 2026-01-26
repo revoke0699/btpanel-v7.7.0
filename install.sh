@@ -29,10 +29,10 @@ echo "✅ 系统识别：$OS"
 # ====== 基础依赖 ======
 echo "📦 安装基础依赖..."
 if [ "$OS" = "centos" ]; then
-  yum install -y wget curl unzip tar lsof socat
+  yum install -y wget curl unzip tar lsof socat nfs-utils
 else
   apt update -y
-  apt install -y wget curl unzip tar lsof socat
+  apt install -y wget curl unzip tar lsof socat nfs-common
 fi
 
 # ====== 安装宝塔 7.7 ======
@@ -84,3 +84,8 @@ echo "🎉 宝塔 7.7 安装 + 优化 + 修复完成"
 echo "👉 面板访问地址：http://${IP}:8888"
 echo "👉 查看账号密码：bt default"
 echo ""
+
+echo "👉 重命名主机"
+read -p "请输入主机名：" hostname
+sudo hostnamectl set-hostname hostname
+
