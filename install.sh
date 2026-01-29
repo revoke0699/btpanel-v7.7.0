@@ -87,5 +87,6 @@ echo ""
 
 echo "👉 重命名主机"
 read -p "请输入主机名：" hostname
-sudo hostnamectl set-hostname hostname
+sudo hostnamectl set-hostname "$hostname"
+
 
