@@ -103,30 +103,41 @@ echo "👉 面板访问地址：http://${IP}:8181"
 echo "👉 查看账号密码：bt default"
 echo ""
 
-echo "👉 重命名主机"
-read -p "请输入主机名：" hostname
-sudo hostnamectl set-hostname "$hostname"
+# ====== Docker 安装询问 ======
+echo ""
+echo "🐳 是否安装 Docker?"
+read -p "请输入 [yes/no]： " install_docker
 
-# 修改宝塔面板标题
-echo "🔧 修改宝塔面板标题为：$hostname"
-TITLE_FILE="/www/server/panel/data/title.json"
-if [ -f "$TITLE_FILE" ]; then
-  # 备份原文件
-  cp "$TITLE_FILE" "${TITLE_FILE}.bak"
-  # 创建新的标题配置
-  cat > "$TITLE_FILE" <<EOF
-{
-  "title": "$hostname",
-  "ps": "$hostname"
-}
-EOF
-  echo "✅ 宝塔面板标题已修改"
+if [[ "$install_docker" =~ ^[Yy][Ee][Ss]$ ]]; then
+  echo "📦 开始安装 Docker..."
+  if [ "$OS" = "centos" ]; then
+    # CentOS 安装 Docker
+    yum install -y yum-utils device-mapper-persistent-data lvm2
+    yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
+    yum install -y docker-ce docker-ce-cli containerd.io
+  else
+    # Ubuntu/Debian 安装 Docker
+    apt install -y apt-transport-https ca-certificates curl software-properties-common
+    curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add -
+    add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
+    apt update -y
+    apt install -y docker-ce docker-ce-cli containerd.io
+  fi
+
+  # 启动 Docker
+  systemctl start docker
+  systemctl enable docker
+
+  # 安装 Docker Compose
+  echo "📦 安装 Docker Compose..."
+  curl -L "https://github.com/docker/compose/releases/download/v2.23.0/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+  chmod +x /usr/local/bin/docker-compose
+
+  echo "✅ Docker 安装完成"
+  docker --version
+  docker-compose --version
 else
-  echo "⚠️  未找到标题配置文件"
+  echo "⏭️  跳过 Docker 安装"
 fi
-
-# 重启宝塔面板使标题生效
-echo "🔄 重启宝塔面板使配置生效..."
-bt restart
 
 
