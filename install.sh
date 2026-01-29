@@ -42,6 +42,11 @@ bash install_panel.sh
 
 sleep 30
 
+
+# ====== 终端修复 ======
+cp /www/server/panel/class/flask_sockets.py /www/server/panel/class/flask_sockets.py.bak
+sed -i 's/self.url_map.add(Rule(rule, endpoint=f))/self.url_map.add(Rule(rule, endpoint=f, websocket=True))/g' /www/server/panel/class/flask_sockets.py 
+
 # ====== 插件过期修复 ======
 echo "🔧 修复插件到期限制..."
 PLUGIN_JSON="/www/server/panel/data/plugin.json"
