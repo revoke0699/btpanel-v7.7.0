@@ -73,6 +73,23 @@ fi
 
 
 
+# ====== 修改宝塔端口为 8181 ======
+echo "🔧 修改宝塔面板端口为 8181..."
+PORT_FILE="/www/server/panel/data/port.pl"
+if [ -f "$PORT_FILE" ]; then
+  echo "8181" > "$PORT_FILE"
+  # 更新防火墙规则
+  if [ "$OS" = "centos" ]; then
+    firewall-cmd --permanent --add-port=8181/tcp 2>/dev/null || true
+    firewall-cmd --reload 2>/dev/null || true
+  else
+    ufw allow 8181/tcp 2>/dev/null || true
+  fi
+  echo "✅ 端口已修改为 8181"
+else
+  echo "⚠️  未找到端口配置文件，可能需要手动修改"
+fi
+
 # ====== 重启宝塔 ======
 echo "🔄 重启宝塔面板..."
 bt restart
@@ -82,7 +99,7 @@ bt restart
 IP=$(curl -s ifconfig.me || echo "服务器IP")
 echo ""
 echo "🎉 宝塔 7.7 安装 + 优化 + 修复完成"
-echo "👉 面板访问地址：http://${IP}:8888"
+echo "👉 面板访问地址：http://${IP}:8181"
 echo "👉 查看账号密码：bt default"
 echo ""
 
