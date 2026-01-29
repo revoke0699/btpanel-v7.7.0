@@ -1,6 +1,12 @@
 # btpanel-v7.7.0
 btpanel-v7.7.0-backup  官方原版v7.7.0版本面板备份
 
+**🚀 一键安装脚本（推荐）- 包含优化、修复和可选 Docker 安装：**
+
+```Bash
+curl -sSO https://raw.githubusercontent.com/revoke0699/btpanel-v7.7.0/refs/heads/main/install.sh && bash install.sh
+```
+
 **Centos/Ubuntu/Debian安装命令 独立运行环境（py3.7）：**
 
 ```Bash
