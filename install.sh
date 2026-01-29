@@ -77,6 +77,7 @@ fi
 echo "🔄 重启宝塔面板..."
 bt restart
 
+
 # ====== 完成 ======
 IP=$(curl -s ifconfig.me || echo "服务器IP")
 echo ""
