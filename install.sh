@@ -107,4 +107,26 @@ echo "👉 重命名主机"
 read -p "请输入主机名：" hostname
 sudo hostnamectl set-hostname "$hostname"
 
+# 修改宝塔面板标题
+echo "🔧 修改宝塔面板标题为：$hostname"
+TITLE_FILE="/www/server/panel/data/title.json"
+if [ -f "$TITLE_FILE" ]; then
+  # 备份原文件
+  cp "$TITLE_FILE" "${TITLE_FILE}.bak"
+  # 创建新的标题配置
+  cat > "$TITLE_FILE" <<EOF
+{
+  "title": "$hostname",
+  "ps": "$hostname"
+}
+EOF
+  echo "✅ 宝塔面板标题已修改"
+else
+  echo "⚠️  未找到标题配置文件"
+fi
+
+# 重启宝塔面板使标题生效
+echo "🔄 重启宝塔面板使配置生效..."
+bt restart
+
 
