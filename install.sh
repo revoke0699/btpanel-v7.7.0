@@ -146,4 +146,48 @@ else
   echo "⏭️  跳过 Docker 安装"
 fi
 
+# ====== 修改面板标题为主机名 ======
+echo ""
+echo "🏷️  是否将面板标题修改为主机名?"
+read -p "请输入 [yes/no]： " change_title
+if [[ "$change_title" =~ ^[Yy][Ee][Ss]$ ]]; then
+  echo "🔧 修改面板标题为主机名..."
+  HOSTNAME=$(hostname)
+  TITLE_FILE="/www/server/panel/class/public.py"
+  if [ -f "$TITLE_FILE" ]; then
+    sed -i 's/G-title.*=.*"宝塔Linux面板"/G_title = "\u6211\u7684\u670d\u52a1\u5668 - '$HOSTNAME'"/g' "$TITLE_FILE" 2>/dev/null || true
+    echo "✅ 面板标题已修改为: $HOSTNAME"
+  fi
+else
+  echo "⏭️  跳过标题修改"
+fi
+
+# ====== 安全加固建议 ======
+echo ""
+echo "🔒 安全建议："
+echo "1️⃣  修改默认端口（当前：8181）"
+echo "2️⃣  修改默认密码"
+echo "3️⃣  绑定域名访问"
+echo "4️⃣  启用二次验证"
+echo ""
+echo "💡 使用以下命令管理面板："
+echo "   bt default           # 查看默认信息"
+echo "   bt 14                # 修改面板端口"
+echo "   bt 5                 # 修改面板密码"
+echo "   bt 6                 # 绑定域名"
+echo ""
+
+# ====== 系统优化建议 ======
+echo "⚡ 系统优化建议："
+echo "1️⃣  配置 SSH 密钥登录（更安全）"
+echo "2️⃣  禁用 root 远程登录（可选）"
+echo "3️⃣  配置防火墙规则"
+echo "4️⃣  定期备份数据"
+echo ""
+echo "📚 常用命令："
+echo "   systemctl restart bt  # 重启面板"
+echo "   bt stop              # 停止面板"
+echo "   bt start             # 启动面板"
+echo "   bt restart           # 重启面板"
+echo ""
 
