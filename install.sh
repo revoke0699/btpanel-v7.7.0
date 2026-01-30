@@ -173,30 +173,38 @@ fi
 
 # ====== 修改面板标题 ======
 echo ""
-echo "📝 请输入自定义标题（例如：我的服务器、生产环境等）："
-read -p "标题: " custom_title
-if [ -n "$custom_title" ]; then
-  echo "🔧 修改面板标题为: $custom_title"
-  TITLE_FILE="/www/server/panel/class/public.py"
-  if [ -f "$TITLE_FILE" ]; then
-    # 备份原文件
-    cp "$TITLE_FILE" "${TITLE_FILE}.bak"
-    # 修改标题
-    sed -i 's/G_title.*=.*"宝塔Linux面板"/G_title = "'"$custom_title"'"/g' "$TITLE_FILE" 2>/dev/null || true
-    echo "✅ 面板标题已修改为: $custom_title"
-    echo "💡 刷新浏览器页面即可看到新标题"
-    hostnamectl set-hostname "$custom_title"
+echo "🏷️  是否自定义面板标题?"
+read -p "请输入 [yes/no]： " change_title
+if [[ "$change_title" =~ ^[Yy][Ee][Ss]$ ]]; then
+  echo "📝 请输入自定义标题（例如：我的服务器、生产环境等）："
+  read -p "标题: " custom_title
+  if [ -n "$custom_title" ]; then
+    echo "🔧 修改面板标题为: $custom_title"
+    TITLE_FILE="/www/server/panel/class/public.py"
+    if [ -f "$TITLE_FILE" ]; then
+      # 备份原文件
+      cp "$TITLE_FILE" "${TITLE_FILE}.bak"
+      # 修改标题
+      sed -i "s/G_title.*=.*\"宝塔Linux面板\"/G_title = \"$custom_title\"/g" "$TITLE_FILE" 2>/dev/null || true
+      echo "✅ 面板标题已修改为: $custom_title"
+      echo "💡 刷新浏览器页面即可看到新标题"
+      hostnamectl set-hostname "$custom_title"
+    else
+      echo "⚠️  未找到面板配置文件，可能需要手动修改"
+    fi
   else
-    echo "⚠️  未找到面板配置文件，可能需要手动修改"
+    echo "⚠️  标题不能为空，跳过修改"
   fi
 else
-  echo "⚠️  标题不能为空，跳过修改"
+  echo "⏭️  跳过标题修改"
 fi
-else
-echo "⏭️  跳过标题修改"
 
+# ====== 重启面板 ======
+echo ""
+echo "🔄 重启宝塔面板..."
 bt 1
 bt 14
+
 # ====== 安全加固建议 ======
 echo ""
 echo "🔒 安全建议："
