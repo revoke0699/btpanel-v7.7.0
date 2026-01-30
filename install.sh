@@ -72,9 +72,14 @@ sed -i 's/self\.url_map\.add(Rule(rule, endpoint=f))/self.url_map.add(Rule(rule,
 echo "🔧 修复插件到期限制..."
 PLUGIN_JSON="/www/server/panel/data/plugin.json"
 if [ -f "$PLUGIN_JSON" ]; then
+  chattr -i "$PLUGIN_JSON" 2>/dev/null || true
   sed -i 's/"endtime":[ ]*-1/"endtime":999999999999/g' "$PLUGIN_JSON"
-  chattr +i "$PLUGIN_JSON" || true
+  chattr +i "$PLUGIN_JSON" 2>/dev/null || true
+  echo "✅ 插件到期限制已修复并锁定"
+else
+  echo "❌ 未找到 plugin.json"
 fi
+
 
 # ====== 去绑定 / 去推荐 / 去弹窗 ======
 echo "🧹 执行宝塔优化补丁..."
