@@ -192,7 +192,8 @@ if [[ "$change_title" =~ ^[Yy][Ee][Ss]$ ]]; then
 else
   echo "⏭️  跳过标题修改"
 fi
-
+bt 1
+bt 14
 # ====== 安全加固建议 ======
 echo ""
 echo "🔒 安全建议："
@@ -221,4 +222,5 @@ echo "   bt stop              # 停止面板"
 echo "   bt start             # 启动面板"
 echo "   bt restart           # 重启面板"
 echo ""
+
 
