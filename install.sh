@@ -66,7 +66,7 @@ echo "🩹 修复 Flask websocket / send_file 报错..."
 FLASK_FILE="/www/server/panel/class/flask_sockets.py"
 if [ -f "$FLASK_FILE" ]; then
   cp $FLASK_FILE ${FLASK_FILE}.bak
-  sed -i "s/self.url_map.add(Rule(rule, endpoint=f))/self.url_map.add(Rule(rule, endpoint=f, websocket=True))/g" $FLASK_FILE
+  sed -i 's/self\.url_map\.add(Rule(rule, endpoint=f))/self.url_map.add(Rule(rule, endpoint=f, websocket=True))/g' $FLASK_FILE
 fi
 
 # ====== SSL 证书申请错误修复 ======
@@ -74,7 +74,7 @@ echo "🔐 修复 SSL 证书申请错误..."
 ACME_FILE="/www/server/panel/class/acme_v2.py"
 if [ -f "$ACME_FILE" ]; then
   cp $ACME_FILE ${ACME_FILE}.bak
-  sed -i 's/X509Req.set_version(2)/X509Req.set_version(0)/g' $ACME_FILE
+  sed -i 's/X509Req\.set_version(2)/X509Req.set_version(0)/g' $ACME_FILE
 fi
 
 
