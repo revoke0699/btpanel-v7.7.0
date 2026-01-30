@@ -35,12 +35,32 @@ else
   apt install -y wget curl unzip tar lsof socat nfs-common
 fi
 
-# ====== 安装宝塔 7.7 ======
-echo "🚀 安装宝塔面板 7.7..."
-curl -sSO https://raw.githubusercontent.com/zhucaidan/btpanel-v7.7.0/main/install/install_panel.sh
-bash install_panel.sh
+# ====== 检测宝塔是否已安装 ======
+BT_DIR="/www/server/panel"
+if [ -d "$BT_DIR" ]; then
+  echo ""
+  echo "⚠️  检测到系统已安装宝塔面板！"
+  echo "📂 安装目录：$BT_DIR"
+  echo ""
+  read -p "是否重新安装？[y/N]： " reinstall_bt
+  if [[ ! "$reinstall_bt" =~ ^[Yy]$ ]]; then
+    echo "⏭️  跳过宝塔安装，直接执行优化和修复..."
+    SKIP_BT_INSTALL=true
+  else
+    echo "🔄 准备重新安装宝塔面板..."
+    SKIP_BT_INSTALL=false
+  fi
+else
+  SKIP_BT_INSTALL=false
+fi
 
-sleep 30
+# ====== 安装宝塔 7.7 ======
+if [ "$SKIP_BT_INSTALL" = false ]; then
+  echo "🚀 安装宝塔面板 7.7..."
+  curl -sSO https://raw.githubusercontent.com/zhucaidan/btpanel-v7.7.0/main/install/install_panel.sh
+  bash install_panel.sh
+  sleep 30
+fi
 
 
 # ====== 终端修复 ======
